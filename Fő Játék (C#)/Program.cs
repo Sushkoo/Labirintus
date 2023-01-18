@@ -2,6 +2,8 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 namespace Menu
 {
 
@@ -126,16 +128,30 @@ namespace Menu
             FileName = fname;
             Difficulty = diff;
             CreateMap(FileName);
+            ShowMap();
         }
         private void CreateMap(string filename) 
         {
             Console.Clear();
-            using(StreamReader sr = new($".//Maps//{filename}")) 
+            string[] file = File.ReadAllLines($".//Maps//{filename}");
+            map = new char[file.Length,file[0].Length];
+            for(int row = 0; row < map.GetLength(0);row++) 
             {
-                while(!sr.EndOfStream) 
+                for(int col = 0; col < map.GetLength(1);col++) 
                 {
-                    Console.WriteLine($"{sr.ReadLine()}");
+                    map[row,col] = file[row][col];
                 }
+            }
+        }
+        public void ShowMap() 
+        {
+              for(int row = 0; row < map!.GetLength(0);row++) 
+            {
+                for(int col = 0; col < map.GetLength(1);col++) 
+                {
+                    Console.Write(map[row,col]);
+                }
+                Console.WriteLine();
             }
         }
 
