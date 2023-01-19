@@ -7,8 +7,18 @@ using System.Linq;
 namespace Menu
 {
 
+
     class Program
     {
+        /*
+        Use it Later
+        public Dictionary<char,string[]> routeDict= new()
+        {
+            {'═',new string[]{"Nyugat","Kelet"}},
+        };
+        */
+        public delegate void CenterText();
+        public static CenterText ct = () => Console.SetCursorPosition(Console.WindowWidth / 2 - 30, 0);
         public static CultureInfo cinfo = Thread.CurrentThread.CurrentCulture;
         //public static string language = "hu-HU"; ONHOLD
 
@@ -27,22 +37,26 @@ namespace Menu
 
 
             Console.Clear();
-            Console.SetCursorPosition(Console.WindowWidth / 2 - 30, 0);
-            Console.WriteLine("-----Labirintus-----\n");
-            Console.WriteLine($"Jelenlegi nyelv: {cinfo}");
-            Console.WriteLine("[1]. Nyelv kiválasztása");
-            Console.WriteLine("[2]. Pálya betöltése");
-            Console.WriteLine("[3]. Pályaszerkesztő");
-            ConsoleKeyInfo key = Console.ReadKey(true);
-            switch (key.KeyChar)
+            do
             {
-                case '1':
-                    Language();
-                    break;
-                case '2':
-                    LoadMap();
-                    break;
+                ct();
+                Console.WriteLine("-----Labirintus-----\n");
+                Console.WriteLine($"Jelenlegi nyelv: {cinfo}");
+                Console.WriteLine("[1]. Nyelv kiválasztása");
+                Console.WriteLine("[2]. Pálya betöltése");
+                Console.WriteLine("[3]. Pályaszerkesztő");
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                switch (key.KeyChar)
+                {
+                    case '1':
+                        Language();
+                        break;
+                    case '2':
+                        LoadMap();
+                        break;
+                }
             }
+            while (Console.ReadKey(true).Key != ConsoleKey.Escape);
 
         }
 
@@ -50,6 +64,8 @@ namespace Menu
         public static void Language()
         {
             Console.Clear();
+            ct();
+            Console.WriteLine("----- Válaszd Ki a nyelvet -----");
             Console.WriteLine($"Jelenlegi nyelv: {cinfo}");
             Console.WriteLine("[1]. Magyar");
             Console.WriteLine("[2]. Angol");
@@ -74,9 +90,9 @@ namespace Menu
         ///<summary>Pályaválasztás (OPTIMALIZÁLÁS SZÜKSÉGES)</summary>
         public static void LoadMap()
         {
-            
+
             Console.Clear();
-            Console.SetCursorPosition(Console.WindowWidth / 2 - 30, 0);
+            ct();
             Console.WriteLine("----Választható pályák-----");
             DirectoryInfo d = new(@"./Maps");
             FileInfo[] maps = d.GetFiles("*.txt");
@@ -86,75 +102,136 @@ namespace Menu
             }
             Console.Write("Írd be a pálya nevét. A Főmenübe való visszalpéshez nyomd meg az ENTER billentyűt: ");
             string answer = Console.ReadLine()!;
-            if (answer == string.Empty)
+            while (maps.All(x => answer != x.Name))
             {
-                MainMenu();
-            }
-            else
-            {
-                //Check if answer is in maps
-                while (maps.All((x) => x.Name != answer))
+                if (answer == string.Empty)
                 {
-                    Console.Write("\nHiba. Rossz pályanevet adtál meg,: ");
-                    answer = Console.ReadLine()!;
+                    MainMenu();
                 }
+                Console.Write("\rHiba. Rossz pályanevet adtál meg! Ha ki akarsz lépni, nyomj meg egy ENTER-t: ");
+                answer = Console.ReadLine()!;
+
             }
 
+
             Console.WriteLine("Válaszd ki a nehézséget\n [1]. Normál\t\t[2.]Nehéz\t\t[3]Vak mód.");
-            int diff = Math.Clamp(int.Parse(Console.ReadLine()!),1,3);
-            Maze maze = new Maze(answer,diff);
+            int diff = Math.Clamp(int.Parse(Console.ReadLine()!), 1, 3);
+            Maze maze = new Maze(answer, diff);
+            maze.CreateMap(ref answer);
+            maze.ShowMap();
+            Player player = new Player(1, 0,maze);
+            player.Move();
 
 
         }
 
     }
 
-    public class Maze 
+
+
+    //Osztály a labirintushoz
+    public class Maze
     {
         //TODO
         /*
-            - Fájból kiolvasás, Array betöltése
             - Kijáratok, Termek megszámlálása
-            - Játékos lehelyezése
-
+            - Játékos pozicióinak elraktározása, ellenőrzése
+            - Játékos talált-e kincset
+                - Ha talált akkor ki írja
+            - Kilépés a labirintusból
+            - Játék közbeni mentés
+            
         */
         private char[,]? map;
-        public string? FileName {get;set;}
-        
-        public int? Difficulty {get;set;}
+        public string? FileName { get; set; }
 
-        public Maze(string fname, int diff) 
+        public int? Difficulty { get; set; }
+
+        public Maze(string fname, int diff)
         {
             FileName = fname;
             Difficulty = diff;
-            CreateMap(FileName);
-            ShowMap();
         }
-        private void CreateMap(string filename) 
+        internal void CreateMap(ref string filename)
         {
-            Console.Clear();
             string[] file = File.ReadAllLines($".//Maps//{filename}");
-            map = new char[file.Length,file[0].Length];
-            for(int row = 0; row < map.GetLength(0);row++) 
+            map = new char[file.Length, file[0].Length];
+            for (int row = 0; row < map.GetLength(0); row++)
             {
-                for(int col = 0; col < map.GetLength(1);col++) 
+                for (int col = 0; col < map.GetLength(1); col++)
                 {
-                    map[row,col] = file[row][col];
+                    map[row, col] = file[row][col];
                 }
             }
         }
-        public void ShowMap() 
+        public void ShowMap()
         {
-              for(int row = 0; row < map!.GetLength(0);row++) 
-            {
-                for(int col = 0; col < map.GetLength(1);col++) 
+                Console.Clear();
+                Console.WriteLine(this.ToString());
+                for (int row = 0; row < map!.GetLength(0); row++)
                 {
-                    Console.Write(map[row,col]);
+                    for (int col = 0; col < map.GetLength(1); col++)
+                    {
+                        Console.Write(map[row, col]);
+                    }
+                    Console.WriteLine();
                 }
-                Console.WriteLine();
-            }
+                
+            
+        }
+        public override string ToString()
+        {
+            return $"Pálya neve: {this.FileName}, mérete: {this.map!.GetLength(0)} sor x {this.map.GetLength(1)} oszlop.";
         }
 
+
+    }
+    public class Player
+    {
+        /*
+            
+        */
+        private Maze Mz;
+        const char CHARACTER_SPRITE = '▒';
+        public int posX { get; set; }
+        public int posY { get; set; }
+        public Player(int x, int y, Maze mz)
+        {
+            posX = x;
+            posY = y;
+            this.Mz = mz;
+        }
+        public void Move()
+        {
+            Console.CursorVisible = false;
+            
+            while (true)
+            {
+                
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.W:
+                        posY--;
+                        break;
+                    case ConsoleKey.S:
+                        posY++;
+                        break;
+                    case ConsoleKey.A:
+                        posX--;
+                        break;
+                    case ConsoleKey.D:
+                        posX++;
+                        break;
+
+                }
+                Mz.ShowMap();
+                Console.SetCursorPosition(posX, posY);
+                Console.Write(CHARACTER_SPRITE);
+                Console.SetCursorPosition(0,Console.WindowHeight-3);
+                Console.Write($"X: {this.posX}\n Y: {this.posY}");
+                
+            }
+        }
     }
 }
 
