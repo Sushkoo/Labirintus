@@ -140,7 +140,7 @@ namespace Menu
                 - Ha talált akkor ki írja
             - Kilépés a labirintusból
             - Játék közbeni mentés
-            
+
         */
         private char[,]? map;
         public string? FileName { get; set; }
