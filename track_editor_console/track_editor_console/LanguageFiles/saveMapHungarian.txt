@@ -1,0 +1,4 @@
+Szeretné elmenteni a pálya jelenlegi állapotát?
+Igen
+Nem
+Vissza a szerkesztőbe

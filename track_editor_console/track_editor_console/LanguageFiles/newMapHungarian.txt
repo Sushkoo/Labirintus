@@ -1,0 +1,3 @@
+Adja meg a pálya szélességét: 
+Adja meg a pálya magasságát: 
+Hiba történt! Kérem 10-nél nagyobb számokat adjon meg!

@@ -1,0 +1,4 @@
+Warning! If you would like to make your track smaller, some track items may hide. If you wouldn't like to change the sizes of the track, enter 0 for width and height too!
+Enter the new width: 
+Enter the new height: 
+The width and the height must be at least 10!
