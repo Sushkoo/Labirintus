@@ -1,0 +1,3 @@
+Enter the width of the track: 
+Enter the height of the track: 
+An error occured! Please enter numbers which are greater than 10!

@@ -1,0 +1,4 @@
+Figyelem! Amennyiben kisebbíteni szeretne a pályán, bizonyos pályaelemek eltünhetnek! Amennyiben mégsem szeretne a pálya méretein változtatni, írjon be 0-t szélességnek és magasságnak is!
+Adja meg az új szélességet: 
+Adja meg az új magasságot: 
+A szélesség és a magasság is legalább 10 nagyságú kell legyen!

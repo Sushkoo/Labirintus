@@ -1,0 +1,5 @@
+Please choose an option below!
+Load map
+Create map
+Select another language
+Exit

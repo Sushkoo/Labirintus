@@ -1,0 +1,8 @@
+D:\Dokumentumok\Kornél dokumentumai\Mechwart 2022-2023\IKT projektmunka 2\Labirintus\track_editor_console\track_editor_console\bin\Debug\track_editor_console.exe.config
+D:\Dokumentumok\Kornél dokumentumai\Mechwart 2022-2023\IKT projektmunka 2\Labirintus\track_editor_console\track_editor_console\bin\Debug\track_editor_console.exe
+D:\Dokumentumok\Kornél dokumentumai\Mechwart 2022-2023\IKT projektmunka 2\Labirintus\track_editor_console\track_editor_console\bin\Debug\track_editor_console.pdb
+D:\Dokumentumok\Kornél dokumentumai\Mechwart 2022-2023\IKT projektmunka 2\Labirintus\track_editor_console\track_editor_console\obj\Debug\track_editor_console.csproj.AssemblyReference.cache
+D:\Dokumentumok\Kornél dokumentumai\Mechwart 2022-2023\IKT projektmunka 2\Labirintus\track_editor_console\track_editor_console\obj\Debug\track_editor_console.csproj.SuggestedBindingRedirects.cache
+D:\Dokumentumok\Kornél dokumentumai\Mechwart 2022-2023\IKT projektmunka 2\Labirintus\track_editor_console\track_editor_console\obj\Debug\track_editor_console.csproj.CoreCompileInputs.cache
+D:\Dokumentumok\Kornél dokumentumai\Mechwart 2022-2023\IKT projektmunka 2\Labirintus\track_editor_console\track_editor_console\obj\Debug\track_editor_console.exe
+D:\Dokumentumok\Kornél dokumentumai\Mechwart 2022-2023\IKT projektmunka 2\Labirintus\track_editor_console\track_editor_console\obj\Debug\track_editor_console.pdb
