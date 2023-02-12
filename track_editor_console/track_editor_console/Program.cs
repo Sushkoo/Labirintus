@@ -250,6 +250,7 @@ namespace track_editor_console
                     if (width < 10 || height < 10)
                     {
                         Console.WriteLine(newMapMessages[2]);
+                        Console.ReadKey();
                         PlaceMap(true, 0, 0);
                     }
                     else
@@ -512,9 +513,9 @@ namespace track_editor_console
             Console.WriteLine(trackSizeMessages[0]);
             try
             {
-                Console.Write(trackSizeMessages[1]);
-                int newWidth = Convert.ToInt32(Console.ReadLine());
                 Console.Write(trackSizeMessages[2]);
+                int newWidth = Convert.ToInt32(Console.ReadLine());
+                Console.Write(trackSizeMessages[1]);
                 int newHeight = Convert.ToInt32(Console.ReadLine());
                 if (newWidth == 0 && newHeight == 0)
                 {
