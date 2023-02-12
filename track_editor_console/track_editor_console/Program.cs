@@ -84,12 +84,6 @@ namespace track_editor_console
         }
     }
 
-    // TODO
-    static class MapChecker
-    {
-
-    }
-
     class Game
     {
         private string Language;
@@ -248,23 +242,23 @@ namespace track_editor_console
 
                 try
                 {    
-                    Console.Write(newMapMessages[0]);
-                    int trackWidth = int.Parse(Console.ReadLine());
                     Console.Write(newMapMessages[1]);
-                    int trackHeight = int.Parse(Console.ReadLine());
+                    int height = int.Parse(Console.ReadLine());
+                    Console.Write(newMapMessages[0]);
+                    int width = int.Parse(Console.ReadLine());
                     Console.Clear();
-                    if (trackHeight < 10 || trackWidth < 10)
+                    if (width < 10 || height < 10)
                     {
                         Console.WriteLine(newMapMessages[2]);
                         PlaceMap(true, 0, 0);
                     }
                     else
                     {
-                        char[,] newMap = new char[trackWidth, trackHeight];
+                        char[,] newMap = new char[height, width];
 
-                        for (int i = 0; i < trackWidth; i++)
+                        for (int i = 0; i < height; i++)
                         {
-                            for (int j = 0; j < trackHeight; j++)
+                            for (int j = 0; j < width; j++)
                             {
                                 newMap[i, j] = '.';
                                 Console.Write(".");
@@ -460,24 +454,41 @@ namespace track_editor_console
             {
                 case 0:
                     {
-                        Console.Clear();
-                        Console.WriteLine(askSave);
-                        Console.Write("File: ");
-                        string fileName = Console.ReadLine() + ".txt";
-                        
-                        StreamWriter sr = new StreamWriter($"../../Maps/{fileName}");
-                        for (int col = 0; col < GetMap().GetLength(0); col++)
+                        if(getNumberOfRooms() > 0 && getNumberOfExits() > 0)
                         {
-                            for (int row = 0; row < GetMap().GetLength(1); row++)
+                            Console.Clear();
+                            Console.WriteLine(askSave);
+                            Console.Write("File: ");
+                            string fileName = Console.ReadLine() + ".txt";
+                        
+                            StreamWriter sr = new StreamWriter($"../../Maps/{fileName}");
+                            for (int col = 0; col < GetMap().GetLength(0); col++)
                             {
-                                sr.Write(GetMap()[col, row]);
+                                for (int row = 0; row < GetMap().GetLength(1); row++)
+                                {
+                                    sr.Write(GetMap()[col, row]);
+                                }
+                                sr.WriteLine();
                             }
-                            sr.WriteLine();
+                            sr.Close();
+                            Console.WriteLine(successfullySave);
+                            Console.ReadKey();
+                            MainMenu();
                         }
-                        sr.Close();
-                        Console.WriteLine(successfullySave);
-                        Console.ReadKey();
-                        MainMenu();
+                        else
+                        {
+                            Console.Clear();
+                            if (this.Language == "hungarian")
+                            {
+                                Console.WriteLine("Nem mentheti el a pályát szoba vagy kijárat nélkül!");
+                            }
+                            else
+                            {
+                                Console.WriteLine("You mustn't save the track without any room or exit!");
+                            }
+                            Console.ReadKey();
+                            PlaceMap(false);
+                        }
                         break;
                     }
                 case 1:
@@ -542,6 +553,60 @@ namespace track_editor_console
                 Console.WriteLine(trackSizeMessages[3]);
                 ChangeTrackSizes();
             }
+        }
+
+        public int getNumberOfRooms()
+        {
+            int numberOfRooms = 0;
+            for (int i = 0; i < Map.GetLength(0); i++)
+            {
+                for (int j = 0; j < Map.GetLength(1); j++)
+                {
+                    if (Map[i, j] == '█')
+                    {
+                        numberOfRooms++;
+                    }
+                }
+            }
+
+            return numberOfRooms;
+        }
+
+        public int getNumberOfExits()
+        {
+            int numberOfExits = 0;
+            List<char> firstRowChars = new List<char>()
+            {
+                '╬' ,'╩','║','╣','╠', '╝','╚'
+            };
+
+            List<char> lastRowChars = new List<char>()
+            {
+                '╬','╦','║','╣','╠','╗', '╔'
+            };
+            
+            List<char> firstColChars = new List<char>()
+            {
+                '╬','═','╦','╩','╣','╗','╝',
+            };
+            
+            List<char> lastColChars = new List<char>()
+            {
+                '╬','═','╦','╩','╠','╚', '╔'
+            };
+
+            for (int i = 0; i < Map.GetLength(0); i++)
+            {
+                for (int j = 0; j < Map.GetLength(1); j++)
+                {
+                    if (firstRowChars.Contains(Map[0, j]) || lastRowChars.Contains(Map[Map.GetLength(0) - 1, j]) || firstColChars.Contains(Map[i, 0]) || lastColChars.Contains(Map[i, Map.GetLength(1) - 1]))
+                    {
+                        numberOfExits++;
+                    }
+                }
+            }
+
+            return numberOfExits;
         }
     }
 
